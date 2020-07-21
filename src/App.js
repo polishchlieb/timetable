@@ -1,41 +1,57 @@
 import React from 'react';
 import Timetable from './Timetable';
-
+import { createDrawerNavigator } from '@react-navigation/drawer'
 import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import { createStackNavigator } from '@react-navigation/stack';
+import AddLessonModal from './AddLessonModal';
 
-const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
+const Drawer = createDrawerNavigator();
+
+function Navigator() {
+  return (
+    <Drawer.Navigator>
+      <Drawer.Screen name="Timetable 1" component={Timetable} />
+    </Drawer.Navigator>
+  );
+}
+
+export const Context = React.createContext();
 
 export default function App() {
+  const [days, setDays] = React.useState([]);
+
+  React.useEffect(() => {
+    setDays([
+      {
+        name: 'poniedziałek',
+        lessons: [
+          { name: 'lekcja', hall: '100', teacher: 'DU' },
+          { name: 'inne -45 min z życia', hall: '200', teacher: 'PA' }
+        ]
+      },
+      {
+        name: 'wtorek',
+        lessons: [
+          { name: 'lekcj', hall: '300', teacher: 'JA' }
+        ]
+      }
+    ]);
+  }, []);
+
   return (
-    <NavigationContainer>
-      <Tab.Navigator
-        screenOptions={({ route }) => ({
-          tabBarIcon: ({ focused, color, size }) => {
-            let iconName;
-
-            if (route.name === 'Timetable 1') {
-              iconName = focused
-                ? 'bookmark'
-                : 'bookmark-outline';
-            } else if (route.name === 'Timetable 2') {
-              iconName = focused ? 'bookmark' : 'bookmark-outline';
-            }
-
-            // You can return any component that you like here!
-            return <Ionicons name={iconName} size={size} color={color} />;
-          },
-        })}
-        tabBarOptions={{
-          activeTintColor: 'tomato',
-          inactiveTintColor: 'gray',
-        }}
-      >
-        <Tab.Screen name="Timetable 1" component={Timetable} />
-        <Tab.Screen name="Timetable 2" component={Timetable} />
-      </Tab.Navigator>
-    </NavigationContainer>
+    <Context.Provider value={{ days, setDays }}>
+      <NavigationContainer>
+        <Stack.Navigator mode="modal">
+          <Stack.Screen
+            name="Main"
+            component={Navigator}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen name="dodawanko" component={AddLessonModal} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </Context.Provider>
   );
 }
