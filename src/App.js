@@ -1,40 +1,41 @@
 import React from 'react';
-import { Text, View, StyleSheet } from 'react-native';
-import Swiper from 'react-native-swiper';
-import Lesson from './Lesson';
+import Timetable from './Timetable';
 
-const styles = StyleSheet.create({
-  wrapper: {},
-  slide: {
-    flex: 1
-  },
-  title: {
-    fontSize: 40,
-    fontWeight: 'bold',
-    margin: 10
-  }
-});
+import 'react-native-gesture-handler';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
-function App() {
-  const days = [
-    { name: 'poniedziałek' },
-    { name: 'wtorek' },
-    { name: 'środa' },
-    { name: 'czwartek' },
-    { name: 'piątek' }
-  ];
+const Tab = createBottomTabNavigator();
 
+export default function App() {
   return (
-    <Swiper style={styles.wrapper} showsButtons={false} showsPagination={false} loop={false}>
-      {days.map((day, index) => (
-        <View key={index} style={styles.slide}>
-          <Text style={styles.title}>{day.name}</Text>
-          <Lesson />
-          <Lesson />
-        </View>
-      ))}
-    </Swiper>
+    <NavigationContainer>
+      <Tab.Navigator
+        screenOptions={({ route }) => ({
+          tabBarIcon: ({ focused, color, size }) => {
+            let iconName;
+
+            if (route.name === 'Timetable 1') {
+              iconName = focused
+                ? 'bookmark'
+                : 'bookmark-outline';
+            } else if (route.name === 'Timetable 2') {
+              iconName = focused ? 'bookmark' : 'bookmark-outline';
+            }
+
+            // You can return any component that you like here!
+            return <Ionicons name={iconName} size={size} color={color} />;
+          },
+        })}
+        tabBarOptions={{
+          activeTintColor: 'tomato',
+          inactiveTintColor: 'gray',
+        }}
+      >
+        <Tab.Screen name="Timetable 1" component={Timetable} />
+        <Tab.Screen name="Timetable 2" component={Timetable} />
+      </Tab.Navigator>
+    </NavigationContainer>
   );
 }
-
-export default App;
