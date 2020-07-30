@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, TextInput, Button } from 'react-native';
 import { Context } from './App';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const defaultValue = { name: '', hall: '', teacher: '' };
 const NewLessonReducer = (state, action) => {
@@ -27,6 +28,7 @@ export default function AddLessonModal({ route: { params: { day } } }) {
   const callback = () => {
     day.lessons.push(state);
     setDays([...days]);
+    AsyncStorage.setItem('days', JSON.stringify(days));
     navigation.goBack();
   }
 
