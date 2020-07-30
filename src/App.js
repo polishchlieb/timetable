@@ -6,6 +6,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import AddLessonModal from './AddLessonModal';
 import AsyncStorage from '@react-native-community/async-storage';
+import EditLessonModal from './EditLessonModal';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -26,8 +27,10 @@ export default function App() {
   React.useEffect(() => {
     async function run() {
       const local = await AsyncStorage.getItem('days');
-      if (local) setDays(JSON.parse(local));
-      else {
+
+      if (local) {
+        setDays(JSON.parse(local));
+      } else {
         const defaultValue = [
           { name: 'poniedziałek', lessons: [] },
           { name: 'wtorek', lessons: [] },
@@ -35,6 +38,7 @@ export default function App() {
           { name: 'czwartek', lessons: [] },
           { name: 'piątek', lessons: [] }
         ];
+
         setDays(defaultValue);
         AsyncStorage.setItem('days', JSON.stringify(defaultValue));
       }
@@ -53,6 +57,7 @@ export default function App() {
             options={{ headerShown: false }}
           />
           <Stack.Screen name="dodawanko" component={AddLessonModal} />
+          <Stack.Screen name="edit" component={EditLessonModal} />
         </Stack.Navigator>
       </NavigationContainer>
     </Context.Provider>

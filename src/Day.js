@@ -21,7 +21,7 @@ export default function Day({ day }) {
     <View style={styles.slide}>
       <Text style={styles.title}>{day.name}</Text>
       {day.lessons.map((lesson, index) => (
-        <Lesson lesson={lesson} key={index} />
+        <Lesson day={day} lesson={lesson} key={index} />
       ))}
       <Button onPress={() => navigation.navigate('dodawanko', { day })} title="przycisk" />
     </View>

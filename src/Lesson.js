@@ -1,12 +1,16 @@
 import React from 'react';
 import { Text, useWindowDimensions, View, StyleSheet } from 'react-native';
+import { TouchableNativeFeedback } from 'react-native-gesture-handler';
+import { useNavigation } from '@react-navigation/native';
 
 const styles = StyleSheet.create({
   name: {
+    paddingLeft: 10,
+  },
+  nameWrapper: {
     flex: 5,
     backgroundColor: '#FF540E',
     justifyContent: 'center',
-    paddingLeft: 10
   },
   hall: {
     flex: 1.5,
@@ -25,7 +29,9 @@ const styles = StyleSheet.create({
   }
 });
 
-export default function Lesson({ lesson }) {
+export default function Lesson({ lesson, day }) {
+  const navigation = useNavigation();
+
   const window = useWindowDimensions();
 
   const lessonStyles = StyleSheet.create({
@@ -40,8 +46,12 @@ export default function Lesson({ lesson }) {
 
   return (
     <View style={lessonStyles.lessonView}>
-      <View style={styles.name}>
-        <Text style={styles.text}>{lesson.name}</Text>
+      <View style={styles.nameWrapper}>
+        <TouchableNativeFeedback onPress={() => navigation.navigate('edit', { day, lesson })}>
+          <View style={styles.name}>
+            <Text style={styles.text}>{lesson.name}</Text>
+          </View>
+        </TouchableNativeFeedback>
       </View>
       <View style={styles.hall}>
         <Text style={styles.text}>{lesson.hall}</Text>
