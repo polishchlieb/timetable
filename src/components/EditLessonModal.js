@@ -33,6 +33,13 @@ export default function EditLessonModal({ route: { params: { day, lesson } } }) 
     AsyncStorage.setItem('days', JSON.stringify(days));
     navigation.goBack();
   }
+  const deleteCallback = () => {
+    const index = day.lessons.indexOf(lesson);
+    day.lessons.splice(index, 1);
+    setDays([...days]);
+    AsyncStorage.setItem('days', JSON.stringify(days));
+    navigation.goBack();
+  }
 
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -44,6 +51,7 @@ export default function EditLessonModal({ route: { params: { day, lesson } } }) 
       <TextInput placeholder="nauczyciel" value={state.teacher}
         onChangeText={t => dispatch({ type: 'SET_TEACHER', payload: t })} />
       <Button onPress={callback} title="edytowanko" />
+      <Button onPress={deleteCallback} title="usun" />
     </View>
   );
 }
