@@ -29,6 +29,7 @@ export default function AddLessonModal({ route: { params: { day } } }) {
     day.lessons.push(state);
     setDays([...days]);
     AsyncStorage.setItem('days', JSON.stringify(days));
+    dispatch({ type: 'CLEAR' });
     navigation.goBack();
   }
 
