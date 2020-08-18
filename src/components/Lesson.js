@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
   }
 });
 
-export default function Lesson({ lesson, day }) {
+export default function Lesson({ lesson }) {
   const navigation = useNavigation();
 
   const window = useWindowDimensions();
@@ -47,7 +47,7 @@ export default function Lesson({ lesson, day }) {
   return (
     <View style={lessonStyles.lessonView}>
       <View style={styles.nameWrapper}>
-        <TouchableNativeFeedback onPress={() => navigation.navigate('edit', { day, lesson })}>
+        <TouchableNativeFeedback onPress={() => navigation.navigate('edit', { lesson })}>
           <View style={styles.name}>
             <Text style={styles.text}>{lesson.name}</Text>
           </View>

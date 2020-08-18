@@ -1,8 +1,8 @@
 import React from 'react';
 import { View, Text, TextInput, Button } from 'react-native';
-import { Context } from './App';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-community/async-storage';
+import Context from '../Context';
 
 const defaultValue = { name: '', hall: '', teacher: '' };
 const NewLessonReducer = (state, action) => {
@@ -22,13 +22,13 @@ const NewLessonReducer = (state, action) => {
 
 export default function AddLessonModal({ route: { params: { day } } }) {
   const navigation = useNavigation();
-  const { days, setDays } = React.useContext(Context);
+  const { setDays } = React.useContext(Context);
   const [state, dispatch] = React.useReducer(NewLessonReducer, defaultValue);
 
-  const callback = () => {
-    day.lessons.push(state);
-    setDays([...days]);
-    AsyncStorage.setItem('days', JSON.stringify(days));
+  const callback = async () => {
+    await day.addLesson(state);
+    console.log(day.timetable.days);
+    setDays([...day.timetable.days]);
     dispatch({ type: 'CLEAR' });
     navigation.goBack();
   }

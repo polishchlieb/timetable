@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, TextInput, Button } from 'react-native';
-import { Context } from './App';
+import Context from '../Context';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-community/async-storage';
 
@@ -20,30 +20,28 @@ const NewLessonReducer = (state, action) => {
   }
 }
 
-export default function EditLessonModal({ route: { params: { day, lesson } } }) {
+export default function EditLessonModal({ route: { params: {lesson } } }) {
   const navigation = useNavigation();
-  const { days, setDays } = React.useContext(Context);
+  const { setDays } = React.useContext(Context);
 
   const { name, hall, teacher } = lesson;
   const [state, dispatch] = React.useReducer(NewLessonReducer, { name, hall, teacher });
 
   const callback = () => {
-    Object.assign(lesson, state);
-    setDays([...days]);
-    AsyncStorage.setItem('days', JSON.stringify(days));
+    lesson.patch(state);
+    setDays([...lesson.timetable.days]);
     navigation.goBack();
   }
+
   const deleteCallback = () => {
-    const index = day.lessons.indexOf(lesson);
-    day.lessons.splice(index, 1);
-    setDays([...days]);
-    AsyncStorage.setItem('days', JSON.stringify(days));
+    lesson.remove();
+    setDays([...lesson.timetable.days]);
     navigation.goBack();
   }
 
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text style={{ fontSize: 30 }}>{day.name}</Text>
+      <Text style={{ fontSize: 30 }}>{lesson.day.name}</Text>
       <TextInput placeholder="przedmiot" value={state.name}
         onChangeText={t => dispatch({ type: 'SET_NAME', payload: t })} />
       <TextInput placeholder="sala" value={state.hall}

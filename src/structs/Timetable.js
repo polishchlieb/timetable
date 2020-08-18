@@ -2,18 +2,19 @@ import AsyncStorage from '@react-native-community/async-storage';
 import Day from './Day';
 
 export default class Timetable {
-  static async create(name) {
-    if (await AsyncStorage.getItem(name))
-      throw new Error('Timetable with given name already exists');
+  static async get(name, strings) {
+    const check = await AsyncStorage.getItem(name);
+    if (check)
+      return new Timetable(name, JSON.parse(check));
 
     const timetable = new Timetable(name, {
       name,
       days: [
-        { name: 'poniedziałek', lessons: [] },
-        { name: 'wtorek', lessons: [] },
-        { name: 'środa', lessons: [] },
-        { name: 'czwartek', lessons: [] },
-        { name: 'piątek', lessons: [] }
+        { name: strings.monday, lessons: [] },
+        { name: strings.tuesday, lessons: [] },
+        { name: strings.wednesday, lessons: [] },
+        { name: strings.thursday, lessons: [] },
+        { name: strings.friday, lessons: [] }
       ]
     });
     await timetable.save();
@@ -35,6 +36,7 @@ export default class Timetable {
   constructor(key, initialValue) {
     this.key = key;
     this.data = initialValue;
+    console.log(initialValue);
     this.days = initialValue.days.map(data => new Day(this, data));
   }
 

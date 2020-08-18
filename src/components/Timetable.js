@@ -1,7 +1,7 @@
 import React from 'react';
 import Swiper from 'react-native-swiper';
 import Day from './Day';
-import { Context } from './App';
+import Context from '../Context';
 
 export default function Timetable() {
   const { days } = React.useContext(Context);

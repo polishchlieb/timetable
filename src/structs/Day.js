@@ -11,8 +11,9 @@ export default class Day {
     this.lessons = initialValue.lessons.map(data => new Lesson(this, data));
   }
 
-  patch(value) {
-    Object.assign(this.data, value);
+  addLesson(value) {
+    this.data.lessons.push(value);
+    this.lessons.push(new Lesson(this, value));
     return this.timetable.save();
   }
 

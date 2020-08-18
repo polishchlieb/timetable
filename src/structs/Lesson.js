@@ -8,8 +8,15 @@ export default class Lesson {
     this.data = initialValue;
   }
 
-  patch(value) {
-    Object.assign(this.data, value);
+  remove() {
+    const index = this.day.data.lessons.indexOf(this.data);
+    this.day.data.lessons.splice(index, 1);
+    this.day.lessons.splice(index, 1);
+    return this.timetable.save();
+  }
+
+  patch(data) {
+    Object.assign(this.data, data);
     return this.timetable.save();
   }
 

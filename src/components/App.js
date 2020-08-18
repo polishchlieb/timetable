@@ -5,8 +5,10 @@ import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import AddLessonModal from './AddLessonModal';
-import AsyncStorage from '@react-native-community/async-storage';
 import EditLessonModal from './EditLessonModal';
+import Context from '../Context';
+import TimetableUtil from '../structs/Timetable';
+import strings_en from '../strings/strings_en';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -19,29 +21,13 @@ function Navigator() {
   );
 }
 
-export const Context = React.createContext();
-
 export default function App() {
   const [days, setDays] = React.useState([]);
 
   React.useEffect(() => {
     async function run() {
-      const local = await AsyncStorage.getItem('days');
-
-      if (local) {
-        setDays(JSON.parse(local));
-      } else {
-        const defaultValue = [
-          { name: 'poniedziałek', lessons: [] },
-          { name: 'wtorek', lessons: [] },
-          { name: 'środa', lessons: [] },
-          { name: 'czwartek', lessons: [] },
-          { name: 'piątek', lessons: [] }
-        ];
-
-        setDays(defaultValue);
-        AsyncStorage.setItem('days', JSON.stringify(defaultValue));
-      }
+      const timetable = await TimetableUtil.get('timetable1', strings_en);
+      setDays(timetable.days);
     }
 
     run();
