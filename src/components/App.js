@@ -1,6 +1,4 @@
 import React from 'react';
-import Timetable from './Timetable';
-import { createDrawerNavigator } from '@react-navigation/drawer'
 import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -9,17 +7,9 @@ import EditLessonModal from './EditLessonModal';
 import Context from '../Context';
 import TimetableUtil from '../structs/Timetable';
 import strings_en from '../strings/strings_en';
+import Navigator from './Navigator';
 
 const Stack = createStackNavigator();
-const Drawer = createDrawerNavigator();
-
-function Navigator() {
-  return (
-    <Drawer.Navigator>
-      <Drawer.Screen name="Timetable 1" component={Timetable} />
-    </Drawer.Navigator>
-  );
-}
 
 export default function App() {
   const [days, setDays] = React.useState([]);

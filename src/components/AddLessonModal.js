@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, Text, TextInput, Button } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import AsyncStorage from '@react-native-community/async-storage';
 import Context from '../Context';
 
 const defaultValue = { name: '', hall: '', teacher: '' };
@@ -25,7 +24,7 @@ export default function AddLessonModal({ route: { params: { day } } }) {
   const { setDays } = React.useContext(Context);
   const [state, dispatch] = React.useReducer(NewLessonReducer, defaultValue);
 
-  const callback = async () => {
+  const handleButtonPress = async () => {
     await day.addLesson(state);
     console.log(day.timetable.days);
     setDays([...day.timetable.days]);
@@ -42,7 +41,7 @@ export default function AddLessonModal({ route: { params: { day } } }) {
         onChangeText={t => dispatch({ type: 'SET_HALL', payload: t })} />
       <TextInput placeholder="nauczyciel"
         onChangeText={t => dispatch({ type: 'SET_TEACHER', payload: t })} />
-      <Button onPress={callback} title="dodaj" />
+      <Button onPress={handleButtonPress} title="dodaj" />
     </View>
   );
 }

@@ -2,7 +2,6 @@ import React from 'react';
 import { View, Text, TextInput, Button } from 'react-native';
 import Context from '../Context';
 import { useNavigation } from '@react-navigation/native';
-import AsyncStorage from '@react-native-community/async-storage';
 
 const defaultValue = { name: '', hall: '', teacher: '' };
 const NewLessonReducer = (state, action) => {
