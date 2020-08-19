@@ -36,7 +36,6 @@ export default class Timetable {
   constructor(key, initialValue) {
     this.key = key;
     this.data = initialValue;
-    console.log(initialValue);
     this.days = initialValue.days.map(data => new Day(this, data));
   }
 

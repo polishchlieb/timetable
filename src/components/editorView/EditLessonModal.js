@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, TextInput, Button } from 'react-native';
+import Context from '../../Context';
 import { useNavigation } from '@react-navigation/native';
-import Context from '../Context';
 
 const defaultValue = { name: '', hall: '', teacher: '' };
 const NewLessonReducer = (state, action) => {
@@ -19,29 +19,37 @@ const NewLessonReducer = (state, action) => {
   }
 }
 
-export default function AddLessonModal({ route: { params: { day } } }) {
+export default function EditLessonModal() {
   const navigation = useNavigation();
-  const { setDays } = React.useContext(Context);
-  const [state, dispatch] = React.useReducer(NewLessonReducer, defaultValue);
+  const { setDays, selectedLesson } = React.useContext(Context);
+  const lesson = selectedLesson.current;
 
-  const handleButtonPress = async () => {
-    await day.addLesson(state);
-    console.log(day.timetable.days);
-    setDays([...day.timetable.days]);
-    dispatch({ type: 'CLEAR' });
+  const { name, hall, teacher } = lesson;
+  const [state, dispatch] = React.useReducer(NewLessonReducer, { name, hall, teacher });
+
+  const callback = () => {
+    lesson.patch(state);
+    setDays([...lesson.timetable.days]);
+    navigation.goBack();
+  }
+
+  const deleteCallback = () => {
+    lesson.remove();
+    setDays([...lesson.timetable.days]);
     navigation.goBack();
   }
 
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text style={{ fontSize: 30 }}>{day.name}</Text>
-      <TextInput placeholder="przedmiot"
+      <Text style={{ fontSize: 30 }}>{lesson.day.name}</Text>
+      <TextInput placeholder="przedmiot" value={state.name}
         onChangeText={t => dispatch({ type: 'SET_NAME', payload: t })} />
-      <TextInput placeholder="sala"
+      <TextInput placeholder="sala" value={state.hall}
         onChangeText={t => dispatch({ type: 'SET_HALL', payload: t })} />
-      <TextInput placeholder="nauczyciel"
+      <TextInput placeholder="nauczyciel" value={state.teacher}
         onChangeText={t => dispatch({ type: 'SET_TEACHER', payload: t })} />
-      <Button onPress={handleButtonPress} title="dodaj" />
+      <Button onPress={callback} title="edytowanko" />
+      <Button onPress={deleteCallback} title="usun" />
     </View>
   );
 }

@@ -2,6 +2,7 @@ import React from 'react';
 import { Text, useWindowDimensions, View, StyleSheet } from 'react-native';
 import { TouchableNativeFeedback } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
+import Context from '../../Context';
 
 const styles = StyleSheet.create({
   name: {
@@ -31,8 +32,9 @@ const styles = StyleSheet.create({
 
 export default function Lesson({ lesson }) {
   const navigation = useNavigation();
-
   const window = useWindowDimensions();
+
+  const { selectedLesson } = React.useContext(Context);
 
   const lessonStyles = StyleSheet.create({
     lessonView: {
@@ -44,10 +46,15 @@ export default function Lesson({ lesson }) {
     }
   });
 
+  const handleNameClick = () => {
+    selectedLesson.current = lesson;
+    navigation.navigate('edit');
+  }
+
   return (
     <View style={lessonStyles.lessonView}>
       <View style={styles.nameWrapper}>
-        <TouchableNativeFeedback onPress={() => navigation.navigate('edit', { lesson })}>
+        <TouchableNativeFeedback onPress={handleNameClick}>
           <View style={styles.name}>
             <Text style={styles.text}>{lesson.name}</Text>
           </View>
