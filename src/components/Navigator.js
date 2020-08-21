@@ -12,6 +12,7 @@ const Temp = () => (
 );
 
 export default function Navigator() {
+  const [isReady, setIsReady] = React.useState(false);
   const { timetables, setTimetables } = React.useContext(Context);
 
   React.useEffect(() => {
@@ -35,18 +36,23 @@ export default function Navigator() {
         AsyncStorage.setItem('timetables', JSON.stringify(defaultValue));
         setTimetables(defaultValue);
       }
+      setIsReady(true);
     }
 
     run();
   });
 
   return (
-    <Drawer.Navigator>
-      {timetables.map((k, index) => (
-        <Drawer.Screen key={index} name={k.name} component={Timetable} initialParams={{ key: index }} />
-      ))}
-      <Drawer.Screen name="dodaj" component={Temp} />
-      <Drawer.Screen name="edytuj" component={Temp} />
-    </Drawer.Navigator>
+    <>
+      {isReady
+        ? <Drawer.Navigator>
+          {timetables.map((k, index) => (
+            <Drawer.Screen key={index} name={k.name} component={Timetable} initialParams={{ key: index }} />
+          ))}
+          <Drawer.Screen name="dodaj" component={Temp} />
+          <Drawer.Screen name="edytuj" component={Temp} />
+        </Drawer.Navigator>
+        : null}
+    </>
   );
 }
