@@ -9,8 +9,6 @@ import ContextProvider from './ContextProvider';
 
 const Stack = createStackNavigator();
 
-// RNLocalize.getLocales()[0].languageCode
-
 export default function App() {
   return (
     <ContextProvider>
